@@ -97,8 +97,7 @@ round(integ_leg(2,2))
 ```python
 def leg_norm(n):
     plt.axis([-1,n+1,-1,n+1])
-    x=np.linspace(0,n,n+1)
-    y=np.linspace(0,n,n+1)
+   
     for i in range(n+1):
         for j in range(n+1):
             plt.text(i,j+0.25,round(integ_leg(i,j),1))
@@ -113,5 +112,108 @@ leg_norm(3)
 
     
 ![png](output_12_0.png)
+    
+
+
+найдем нули функции
+
+
+```python
+# формула производной
+def leg_der(x,n):
+    if n>0:
+        return n*(leg_poly(x,n-1)-x*leg_poly(x,n))/(1-x**2)
+    else:
+        return 0
+```
+
+
+```python
+h=0.05
+k=int(2/h)
+x1=np.linspace(-1+h,1-h,k)
+for i in range(5):
+    y1=map(lambda x: leg_der(x,i), x1)
+    plt.plot(x1,list(y1))
+plt.legend(range(5))
+plt.title('Производные полинома Лежандра')
+plt.show()
+```
+
+
+    
+![png](output_15_0.png)
+    
+
+
+
+```python
+# начальные значения
+def x_null(i,n):
+    return math.cos(math.pi*(4*i-1)/(4*n+2))
+```
+
+
+```python
+def result(n,e=1e6):
+    res=np.ones(n)
+    for i in range(1,n+1):
+        x=x_null(i,n)
+        while 1:
+            y=x-leg_poly(x,n)/leg_der(x,n)
+            if np.abs(x-y)<e:
+                break
+            x=y
+        res[i-1]=x
+    return res
+            
+ # нахождение нулей полинома       
+```
+
+
+```python
+result(0)
+```
+
+
+
+
+    array([], dtype=float64)
+
+
+
+
+```python
+range(1)
+```
+
+
+
+
+    range(0, 1)
+
+
+
+
+```python
+def leg_null(n):
+    plt.axis([0,n+1,-1,n+1])
+    plt.xlabel('степень полинома Лежандра')
+
+    for i in range(n+1):
+        res=result(i)
+        for j in range(i):
+            plt.text(i,j+0.25,round(res[j],5))
+            plt.plot(i,j,'ro')
+```
+
+
+```python
+leg_null(4)
+```
+
+
+    
+![png](output_21_0.png)
     
 
